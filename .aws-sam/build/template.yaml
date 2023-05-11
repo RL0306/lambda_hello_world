@@ -1,0 +1,31 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: 'aws-go-test
+
+  Sample SAM Template for aws-go-test
+
+  '
+Resources:
+  HelloWorldFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: HelloWorldFunction
+      Handler: hello-world
+      Runtime: go1.x
+      Architectures:
+      - x86_64
+      Events:
+        MySQSEvent:
+          Type: SQS
+          Properties:
+            Queue:
+              Fn::GetAtt:
+              - MySqsQueue
+              - Arn
+            BatchSize: 10
+      Environment:
+        Variables:
+          MICRONAUT_ENVIRONMENTS: dev
+          TMPDIR: /c/tmp
+    Metadata:
+      SamResourceId: HelloWorldFunction
